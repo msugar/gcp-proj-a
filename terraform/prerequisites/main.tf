@@ -24,11 +24,15 @@ provider "google" {
 resource "random_integer" "random_project_id" {
   min = 10000
   max = 99999
+
+  keepers = {
+    project_name = "${var.project_prefix}-${var.env}"
+  }
 }
 
 resource "google_project" "core" {
   name       = "${var.project_prefix}-${var.env}"
-  project_id = "${var.project_prefix}-${var.env}-${random_integer.random_project_id}"
+  project_id = "${var.project_prefix}-${var.env}-${random_integer.random_project_id.result}"
 
   auto_create_network = false
 }
