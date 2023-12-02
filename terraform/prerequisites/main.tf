@@ -43,18 +43,16 @@ resource "google_project" "core" {
   auto_create_network = false
 }
 
-/*
 resource "time_sleep" "wait_30_seconds" {
   depends_on      = [google_project.core]
   create_duration = "30s"
 }
-*/
 
 resource "google_project_service" "services" {
   for_each = toset(var.gcp_services_list)
   project  = google_project.core.project_id
   service  = each.value
-  //depends_on = [time_sleep.wait_30_seconds]
+  depends_on = [time_sleep.wait_30_seconds]
 }
 
 resource "google_storage_bucket" "core_tf_state" {
