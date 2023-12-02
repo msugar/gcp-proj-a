@@ -3,7 +3,7 @@ resource "google_bigquery_dataset" "alpha" {
 }
 
 resource "google_bigquery_table" "alpha_1" {
-  dataset_id = "alpha"
+  dataset_id = google_bigquery_dataset.alpha.dataset_id
   table_id   = "alpha_1"
 
   schema = <<EOF
@@ -30,7 +30,7 @@ resource "google_bigquery_table" "alpha_1" {
 }
 
 resource "google_bigquery_table" "alpha_2" {
-  dataset_id = "alpha"
+  dataset_id = google_bigquery_dataset.alpha.dataset_id
   table_id   = "alpha_2"
 
   schema = <<EOF
@@ -63,7 +63,7 @@ resource "google_bigquery_dataset" "beta" {
 }
 
 resource "google_bigquery_table" "beta_1" {
-  dataset_id = "beta"
+  dataset_id = google_bigquery_dataset.beta.dataset_id
   table_id   = "beta_1"
 
   schema = <<EOF
