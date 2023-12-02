@@ -1,16 +1,27 @@
 variable "env" {
-  description = "The environment to deploy the Core project to."
+  description = "The environment to deploy the target project to."
   type        = string
   nullable    = false
 
   validation {
-    condition     = can(regex("^(dev|stg|prd|np|pr)$", var.env))
-    error_message = "The environment must be one of dev, stg, or prd. Or, if you're using the non-prod or prod environments, use np or pr, respectively."
+    condition     = can(regex("^(np|pr)$", var.env))
+    error_message = "The environment must be one of np or pr."
+  }
+}
+
+variable "region" {
+  description = "The region to deploy the target project to."
+  type        = string
+  nullable    = false
+
+  validation {
+    condition     = can(regex("^(northamerica-northeast1|northamerica-northeast2)$", var.region))
+    error_message = "The region must be one of northamerica-northeast1 or northamerica-northeast2."
   }
 }
 
 variable "project_prefix" {
-  description = "The prefix to use for the Core project name."
+  description = "The prefix to use for the target project's name."
   type        = string
   nullable    = false
   default     = "proj-a"
@@ -22,7 +33,7 @@ variable "project_prefix" {
 }
 
 variable "gcp_services_list" {
-  description = "The list of GCP APIs necessary for the Core project."
+  description = "The list of GCP APIs necessary for the target project."
   type        = list(string)
   default = [
     "compute.googleapis.com",
@@ -32,7 +43,7 @@ variable "gcp_services_list" {
 }
 
 variable "gcs_location" {
-  description = "The location of the GCS bucket that will store the tfstate file for the Core project."
+  description = "The location of the GCS bucket that will store the tfstate files for the target project."
   type        = string
   default     = "NORTHAMERICA-NORTHEAST1"
 

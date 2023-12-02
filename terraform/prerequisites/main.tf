@@ -18,7 +18,7 @@ terraform {
 }
 
 provider "google" {
-  region = "northamerica-northeast1"
+  region = var.region
 }
 
 resource "random_integer" "random_project_id" {
@@ -35,7 +35,7 @@ data "google_billing_account" "acct" {
   open         = true
 }
 
-resource "google_project" "core" {
+resource "google_project" "target" {
   name       = "${var.project_prefix}-${var.env}"
   project_id = "${var.project_prefix}-${var.env}-${random_integer.random_project_id.result}"
 
@@ -44,20 +44,20 @@ resource "google_project" "core" {
 }
 
 resource "time_sleep" "wait_30_seconds" {
-  depends_on      = [google_project.core]
+  depends_on      = [google_project.target]
   create_duration = "30s"
 }
 
 resource "google_project_service" "services" {
   for_each = toset(var.gcp_services_list)
-  project  = google_project.core.project_id
+  project  = google_project.target.project_id
   service  = each.value
   depends_on = [time_sleep.wait_30_seconds]
 }
 
-resource "google_storage_bucket" "core_tf_state" {
-  name     = "tf-state-${google_project.core.project_id}"
-  project  = google_project.core.project_id
+resource "google_storage_bucket" "target_tf_state" {
+  name     = "tf-state-${google_project.target.project_id}"
+  project  = google_project.target.project_id
   location = "NORTHAMERICA-NORTHEAST1"
 
   public_access_prevention = "enforced"
