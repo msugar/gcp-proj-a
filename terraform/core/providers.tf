@@ -7,13 +7,13 @@ terraform {
   }
 
   backend "gcs" {
-    bucket = "tf-state-${var.project_id}"
-    prefix = "core"
+    bucket = "tf-state-proj-a-np-836412"
+    prefix = "terraform/np"
   }
 }
 
 provider "google" {
   project = var.project_id
-  region  = "northamerica-northeast1"
+  region  = var.region
 }
 
