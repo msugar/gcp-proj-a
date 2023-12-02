@@ -7,8 +7,7 @@ terraform {
   }
 
   backend "gcs" {
-    bucket = "tf-state-proj-a-np-836412"
-    prefix = "terraform/np"
+    # Run `make np` or `make pr` to set the proper bucket and prefix for each environment
   }
 }
 
